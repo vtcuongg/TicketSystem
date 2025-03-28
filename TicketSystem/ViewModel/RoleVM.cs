@@ -1,6 +1,6 @@
-﻿namespace TicketSystem.Models
+﻿namespace TicketSystem.ViewModel
 {
-    public class RoleModel
+    public class RoleVM
     {
         public int RoleID { get; set; }
         public string RoleName { get; set; } = string.Empty;

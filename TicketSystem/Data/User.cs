@@ -15,8 +15,7 @@ namespace TicketSystem.Data
         [Required, StringLength(255)]
         public string Email { get; set; } = string.Empty;
 
-        [StringLength(20)]
-        public string? Phone { get; set; }
+         public string? Phone { get; set; }
 
         public DateTime? DateOfBirth { get; set; }
 
@@ -29,8 +28,7 @@ namespace TicketSystem.Data
         [StringLength(500)]
         public string? Avatar { get; set; }
 
-        [StringLength(20)]
-        public string? NationalID { get; set; }
+         public string? NationalID { get; set; }
 
         [ForeignKey("Department")]
         public int? DepartmentID { get; set; }
@@ -40,7 +38,9 @@ namespace TicketSystem.Data
         public int? RoleID { get; set; }
         public Role? Role { get; set; }
 
-        [Required, StringLength(255)]
+        [StringLength(10)]
+        [Column(TypeName = "NVARCHAR(10)")]
+        public string Status { get; set; } = "Active";
         public string PasswordHash { get; set; } = string.Empty;
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

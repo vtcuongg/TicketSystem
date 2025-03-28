@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using TicketSystem.Data;
 using TicketSystem.Models;
+using TicketSystem.Repositories.Interface;
+using TicketSystem.ViewModel;
 
 namespace TicketSystem.Repositories
 {
@@ -52,6 +54,10 @@ namespace TicketSystem.Repositories
                 _context.Users.Update(existingUser);
                 await _context.SaveChangesAsync();
 
+            }
+            else
+            {
+                throw new KeyNotFoundException($"Không tìm thấy User với ID = {entity.UserID}");
             }
         }
     }

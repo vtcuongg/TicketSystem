@@ -1,8 +1,8 @@
-﻿
-using TicketSystem.Data;
+﻿using TicketSystem.Data;
 using TicketSystem.Models;
+using TicketSystem.ViewModel;
 
-namespace TicketSystem.Repositories
+namespace TicketSystem.Repositories.Interface
 {
     public interface IUserRepository
     {

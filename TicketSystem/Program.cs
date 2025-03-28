@@ -3,6 +3,7 @@ using System;
 using TicketSystem.Data;
 using TicketSystem.Helper;
 using TicketSystem.Repositories;
+using TicketSystem.Repositories.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,12 @@ builder.Services.AddDbContext<MyDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddAutoMapper(typeof(ApplicationMapper));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+builder.Services.AddScoped<ITicketFeedBackRepository, TicketFeedBackRepository>();
+builder.Services.AddScoped<ITicketFeedBackAssigneeRepository, TicketFeedBackAssigneeRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

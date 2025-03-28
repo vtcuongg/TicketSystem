@@ -1,19 +1,30 @@
-﻿namespace TicketSystem.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TicketSystem.Models
 {
     public class UserModel
     {
-        public int UserID { get; set; }
+        //public int UserID { get; set; }
         public string FullName { get; set; } = string.Empty;
+        [EmailAddress]
         public string Email { get; set; } = string.Empty;
-        public string? Phone { get; set; }
+      
+        [RegularExpression("^0[0-9]{9}$", ErrorMessage = "Phone number must be 10 digits and start with 0.")]
+        public string Phone { get; set; }=string.Empty;
         public DateTime? DateOfBirth { get; set; }
         public string? Gender { get; set; }
         public string? Address { get; set; }
         public string? Avatar { get; set; }
-        public string? NationalID { get; set; }
+        [Required]
+        [RegularExpression("^[0-9]{12}$", ErrorMessage = "National ID must be exactly 12 digits.")]
+        public string? NationalID { get; set; } 
+
         public int? DepartmentID { get; set; }
         public int? RoleID { get; set; }
-        public string PasswordHash { get; set; } = string.Empty;
+        [Required]
+        [RegularExpression("^(?=.*[A-Z])(?=.*[!@#$%^&*]).{6,}$", ErrorMessage = "Password must be at least 6 characters long, contain at least one uppercase letter, and one special character.")]
+        public string? PasswordHash { get; set; } = string.Empty;
+
         public DateTime CreatedAt { get; set; }
     }
 }
