@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using TicketSystem.Data;
 using TicketSystem.Models;
+using TicketSystem.Repositories;
 using TicketSystem.Repositories.Interface;
 using TicketSystem.ViewModel;
 
@@ -20,12 +21,13 @@ namespace TicketSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
-            try {
+            try
+            {
                 var users = await _userRepository.GetAll();
                 return Ok(new { data = new { users } });
             }
             catch (Exception ex)
-             {
+            {
                 return StatusCode(500, new { message = "Lỗi máy chủ", error = ex.Message });
 
             }
@@ -33,7 +35,7 @@ namespace TicketSystem.Controllers
 
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserById(int id )
+        public async Task<IActionResult> GetUserById(int id)
         {
             try
             {
@@ -42,6 +44,22 @@ namespace TicketSystem.Controllers
                     return NotFound(new { message = $"Không tìm thấy User với ID = {id}" });
 
                 return Ok(new { data = user });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Lỗi máy chủ", error = ex.Message });
+            }
+        }
+        [HttpGet("ByDepartment/{id}")]
+        public async Task<IActionResult> GetUserByDepartmentId(int id)
+        {
+            try
+            {
+                var users = await _userRepository.GetByDepartmentId(id);
+                if (users == null)
+                    return NotFound(new { message = $"Không tìm thấy User với DepartmentID = {id}" });
+
+                return Ok(new { data = users });
             }
             catch (Exception ex)
             {
@@ -101,5 +119,31 @@ namespace TicketSystem.Controllers
                 return StatusCode(500, new { message = "Lỗi khi xóa user", error = ex.Message });
             }
         }
-    } 
+        [HttpPatch("Department")]
+        public async Task<IActionResult> UpdateDepartment(int userId, [FromBody] int newDepartmentId)
+        {
+            try
+            {
+                await _userRepository.UpdateDepartment(userId, newDepartmentId);
+                return Ok(new { message = "Cập nhật thành công" });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+        [HttpPatch("Role")]
+        public async Task<IActionResult> UpdateRole(int userId, [FromBody] int newRole)
+        {
+            try
+            {
+                await _userRepository.UpdateRole(userId, newRole);
+                return Ok(new { message = "Cập nhật thành công" });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+    }
 }

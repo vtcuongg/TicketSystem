@@ -6,10 +6,13 @@ namespace TicketSystem.Data
     public class Ticket
     {
         [Key]
-        public int TicketID { get; set; }
+        
+        [DatabaseGenerated(DatabaseGeneratedOption.None)] // Không tự động tăng
+        [Required, StringLength(50)]
+        public string  TicketID { get; set; }
 
         [Required, StringLength(255)]
-        public string Title { get; set; } = string.Empty;
+         public string Title { get; set; } = string.Empty;
 
         [Required]
         public string Description { get; set; } = string.Empty;

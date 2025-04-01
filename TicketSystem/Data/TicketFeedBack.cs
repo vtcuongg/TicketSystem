@@ -9,7 +9,7 @@ namespace TicketSystem.Data
         public int FeedbackID { get; set; }
 
         [Required]
-        public int TicketID { get; set; }
+        public string TicketID { get; set; }
 
         [Required]
         public int? CreatedBy { get; set; } // Người tạo feedback
@@ -29,9 +29,5 @@ namespace TicketSystem.Data
         // Quan hệ với User (Người tạo feedback)
         [ForeignKey("CreatedBy")]
         public virtual User? User { get; set; }
-
-        // Danh sách người nhận feedback
-        public virtual ICollection<TicketFeedbackAssignee> AssignedUsers { get; set; } = new List<TicketFeedbackAssignee>();
-
     }
 }

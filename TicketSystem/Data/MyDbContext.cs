@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TicketSystem.Models;
 
 namespace TicketSystem.Data
 {
@@ -10,27 +11,36 @@ namespace TicketSystem.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<TicketFeedBack> TicketFeedBacks { get; set; }
+        public DbSet<TicketAssignment> TicketAssignments { get; set; }
         public DbSet<TicketFeedbackAssignee> TicketFeedbackAssignees { get; set; }
-
+        public DbSet<SearchTicketResult> SearchTicketResults { get; set; }
         public MyDbContext(DbContextOptions<MyDbContext> options):base(options)
         {
 
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Ticket>()
+            .HasIndex(t => t.TicketID) // Tạo chỉ mục
+            .IsUnique(); // Đảm bảo giá trị là duy nhất
             modelBuilder.Entity<Role>().HasIndex(r => r.RoleName).IsUnique();
             modelBuilder.Entity<Department>().HasIndex(d => d.DepartmentName).IsUnique();
             modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
             modelBuilder.Entity<User>().HasIndex(u => u.NationalID).IsUnique();
 
-            modelBuilder.Entity<TicketFeedbackAssignee>()
-                .HasKey(tfa => new { tfa.FeedbackID, tfa.AssignedTo });
-
+            
             modelBuilder.Entity<TicketFeedBack>()
            .HasOne(tf => tf.User)
            .WithMany()
            .HasForeignKey(tf => tf.CreatedBy)
            .OnDelete(DeleteBehavior.NoAction);
+         
+            modelBuilder.Entity<TicketFeedbackAssignee>()
+                .HasOne(tfa => tfa.Ticket)
+                .WithMany()  
+                .HasForeignKey(tfa => tfa.TicketID)
+                .OnDelete(DeleteBehavior.Cascade); 
+
             modelBuilder.Entity<TicketFeedbackAssignee>()
                 .HasOne(tfa => tfa.User)
                 .WithMany()
@@ -69,6 +79,21 @@ namespace TicketSystem.Data
             .WithMany()
             .HasForeignKey(c => c.DepartmentID)
             .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TicketAssignment>()
+           .HasOne(t => t.Ticket)
+           .WithMany()  
+           .HasForeignKey(t => t.TicketID)
+           .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TicketAssignment>()
+                .HasOne(t => t.User)
+                .WithMany() 
+                .HasForeignKey(t => t.AssignedTo)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // Không ánh xạ SearchTicketResult vào bảng database
+            modelBuilder.Entity<SearchTicketResult>().HasNoKey();
         }
     }
 }

@@ -18,6 +18,7 @@ namespace TicketSystem.Helper
             CreateMap<Ticket, TicketVM>().ReverseMap();
             CreateMap<TicketFeedBack, TicketFeedBackVM>().ReverseMap();
             CreateMap<TicketFeedbackAssignee,TicketFeedBackAssigneeVM >().ReverseMap();
+            CreateMap<TicketAssignment, TicketAssignmentVM>().ReverseMap();
 
         }
 

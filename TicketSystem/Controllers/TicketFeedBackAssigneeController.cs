@@ -18,18 +18,48 @@ namespace TicketSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> AddTicketFeedBackAssignee(TicketFeedBackAssigneeVM ticketFeedBackAssignee)
         {
-            
+
+            try
+            {
+                if (ticketFeedBackAssignee == null)
+                {
+                    return BadRequest(new { message = "Dữ liệu không hợp lệ." });
+                }
+
                 await _ticketFeedBackAssigneeRepository.Add(ticketFeedBackAssignee);
-                return Ok(new { message = "Success" });
-            
-                
-           
+                return Ok(new { message = "Thêm thành công." });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Lỗi máy chủ nội bộ.", error = ex.Message });
+            }
         }
         [HttpDelete]
-        public async Task<IActionResult> DeleteCategory(int feedbackId, int assignedTo)
+        public async Task<IActionResult> DeleteCategory(string TicketId, int assignedTo)
         {
-            await _ticketFeedBackAssigneeRepository.Delete(feedbackId, assignedTo);
-            return Ok(new { message = "Success" });
-        }
+            try
+            {
+                if (TicketId ==null || assignedTo <= 0)
+                {
+                    return BadRequest(new { message = "ID phản hồi hoặc ID người được giao không hợp lệ." });
+                }
+
+                await _ticketFeedBackAssigneeRepository.Delete(TicketId, assignedTo);
+                return Ok(new { message = "Xóa thành công." });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Lỗi máy chủ nội bộ.", error = ex.Message });
+            }
+        
+    }
     }
 }

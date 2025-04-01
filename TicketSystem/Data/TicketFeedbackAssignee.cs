@@ -6,17 +6,21 @@ namespace TicketSystem.Data
     public class TicketFeedbackAssignee
     {
         [Key]
-        public int FeedbackID { get; set; }
+        public int TicketFeedbackAssigneeID { get; set; }
 
-        [Key]
+        [Required] 
+        [StringLength(50)]
+        public string TicketID { get; set; }
+
+        [Required]  
         public int AssignedTo { get; set; }
 
-        // Quan hệ với TicketFeedback
-        [ForeignKey("FeedbackID")]
-        public virtual TicketFeedBack? TicketFeedback { get; set; }
+        // Quan hệ với Ticket
+        [ForeignKey(nameof(TicketID))] 
+        public virtual Ticket? Ticket { get; set; }
 
         // Quan hệ với User (Người được đánh giá)
-        [ForeignKey("AssignedTo")]
+        [ForeignKey(nameof(AssignedTo))]
         public virtual User? User { get; set; }
     }
 }

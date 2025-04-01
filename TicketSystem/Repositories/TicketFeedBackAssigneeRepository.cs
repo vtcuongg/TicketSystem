@@ -23,12 +23,13 @@ namespace TicketSystem.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task Delete(int feedbackId, int assignedTo)
+        public async Task Delete(string TicketId, int assignedTo)
         {
-            var ticketFeedbackAssignee = await _context.TicketFeedbackAssignees.FindAsync(feedbackId, assignedTo);
-            if (ticketFeedbackAssignee != null)
+            var entity = _context.TicketFeedbackAssignees
+         .FirstOrDefault(tfa => tfa.TicketID == TicketId && tfa.AssignedTo == assignedTo);
+            if (entity != null)
             {
-                _context.TicketFeedbackAssignees.Remove(ticketFeedbackAssignee);
+                _context.TicketFeedbackAssignees.Remove(entity);
                 await _context.SaveChangesAsync();
             }
 

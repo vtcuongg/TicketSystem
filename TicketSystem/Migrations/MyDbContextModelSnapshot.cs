@@ -42,7 +42,7 @@ namespace TicketSystem.Migrations
 
                     b.HasIndex("DepartmentID");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("TicketSystem.Data.Department", b =>
@@ -63,7 +63,7 @@ namespace TicketSystem.Migrations
                     b.HasIndex("DepartmentName")
                         .IsUnique();
 
-                    b.ToTable("Departments");
+                    b.ToTable("Departments", (string)null);
                 });
 
             modelBuilder.Entity("TicketSystem.Data.Role", b =>
@@ -84,16 +84,14 @@ namespace TicketSystem.Migrations
                     b.HasIndex("RoleName")
                         .IsUnique();
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("TicketSystem.Data.Ticket", b =>
                 {
-                    b.Property<int>("TicketID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TicketID"));
+                    b.Property<string>("TicketID")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int?>("CategoryID")
                         .HasColumnType("int");
@@ -144,12 +142,39 @@ namespace TicketSystem.Migrations
 
                     b.HasIndex("DepartmentID");
 
-                    b.ToTable("Tickets", t =>
+                    b.HasIndex("TicketID")
+                        .IsUnique();
+
+                    b.ToTable("Tickets", null, t =>
                         {
                             t.HasCheckConstraint("CHK_Ticket_Priority", "Priority IN (N'Thấp', N'Trung bình', N'Cao', N'Khẩn cấp')");
 
                             t.HasCheckConstraint("CHK_Ticket_Status", "Status IN (N'Mới', N'Đang xử lý', N'Chờ xác nhận', N'Hoàn thành', N'Đã hủy',N'Cháy Deadline')");
                         });
+                });
+
+            modelBuilder.Entity("TicketSystem.Data.TicketAssignment", b =>
+                {
+                    b.Property<int>("AssignmentID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AssignmentID"));
+
+                    b.Property<int>("AssignedTo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TicketID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("AssignmentID");
+
+                    b.HasIndex("AssignedTo");
+
+                    b.HasIndex("TicketID");
+
+                    b.ToTable("TicketAssignments", (string)null);
                 });
 
             modelBuilder.Entity("TicketSystem.Data.TicketFeedBack", b =>
@@ -174,8 +199,9 @@ namespace TicketSystem.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
-                    b.Property<int>("TicketID")
-                        .HasColumnType("int");
+                    b.Property<string>("TicketID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("FeedbackID");
 
@@ -183,22 +209,37 @@ namespace TicketSystem.Migrations
 
                     b.HasIndex("TicketID");
 
-                    b.ToTable("TicketFeedBacks");
+                    b.ToTable("TicketFeedBacks", (string)null);
                 });
 
             modelBuilder.Entity("TicketSystem.Data.TicketFeedbackAssignee", b =>
                 {
-                    b.Property<int>("FeedbackID")
+                    b.Property<int>("TicketFeedbackAssigneeID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TicketFeedbackAssigneeID"));
 
                     b.Property<int>("AssignedTo")
                         .HasColumnType("int");
 
-                    b.HasKey("FeedbackID", "AssignedTo");
+                    b.Property<int?>("TicketFeedBackFeedbackID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TicketID")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("TicketFeedbackAssigneeID");
 
                     b.HasIndex("AssignedTo");
 
-                    b.ToTable("TicketFeedbackAssignees");
+                    b.HasIndex("TicketFeedBackFeedbackID");
+
+                    b.HasIndex("TicketID");
+
+                    b.ToTable("TicketFeedbackAssignees", (string)null);
                 });
 
             modelBuilder.Entity("TicketSystem.Data.User", b =>
@@ -273,12 +314,81 @@ namespace TicketSystem.Migrations
 
                     b.HasIndex("RoleID");
 
-                    b.ToTable("Users", t =>
+                    b.ToTable("Users", null, t =>
                         {
                             t.HasCheckConstraint("CHK_User_Status", "Status IN (N'Active', N'Inactive')");
 
                             t.HasCheckConstraint("CK_User_Gender", "Gender IN (N'Nam', N'Nữ', N'Khác')");
                         });
+                });
+
+            modelBuilder.Entity("TicketSystem.Models.SearchTicketResult", b =>
+                {
+                    b.Property<int?>("AssignedTo")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AssignmentID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Avatar")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CategoryID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedByAvatar")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedByName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DepartmentID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsFeedBack")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Priority")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TicketID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.ToTable("SearchTicketResults", (string)null);
                 });
 
             modelBuilder.Entity("TicketSystem.Data.Category", b =>
@@ -315,6 +425,25 @@ namespace TicketSystem.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("TicketSystem.Data.TicketAssignment", b =>
+                {
+                    b.HasOne("TicketSystem.Data.User", "User")
+                        .WithMany()
+                        .HasForeignKey("AssignedTo")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("TicketSystem.Data.Ticket", "Ticket")
+                        .WithMany()
+                        .HasForeignKey("TicketID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ticket");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("TicketSystem.Data.TicketFeedBack", b =>
                 {
                     b.HasOne("TicketSystem.Data.User", "User")
@@ -342,13 +471,17 @@ namespace TicketSystem.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("TicketSystem.Data.TicketFeedBack", "TicketFeedback")
+                    b.HasOne("TicketSystem.Data.TicketFeedBack", null)
                         .WithMany("AssignedUsers")
-                        .HasForeignKey("FeedbackID")
+                        .HasForeignKey("TicketFeedBackFeedbackID");
+
+                    b.HasOne("TicketSystem.Data.Ticket", "Ticket")
+                        .WithMany()
+                        .HasForeignKey("TicketID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("TicketFeedback");
+                    b.Navigation("Ticket");
 
                     b.Navigation("User");
                 });

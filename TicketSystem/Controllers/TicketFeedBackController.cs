@@ -46,6 +46,23 @@ namespace TicketSystem.Controllers
             }
         }
 
+        [HttpGet("ByTicketId/{id}")]
+        public async Task<IActionResult> GetTicketFeedBackByTicketId(string id)
+        {
+            try
+            {
+                var ticketFeedBack = await _ticketFeedBackRepository.GetByTicketId(id);
+                if (ticketFeedBack == null)
+                    return NotFound(new { message = $"Không tìm thấy Feedback với IDTicket = {id}" });
+
+                return Ok(new { data = ticketFeedBack });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Lỗi khi lấy Feedback", error = ex.Message });
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddTicketFeedBack(TicketFeedBackVM ticketFeedBack)
         {

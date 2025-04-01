@@ -46,6 +46,14 @@ namespace TicketSystem.Repositories
             return ticketFeedBack != null ? _mapper.Map<TicketFeedBackVM>(ticketFeedBack) : null;
         }
 
+        public async Task<TicketFeedBackVM?> GetByTicketId(string id)
+        {
+            var ticketFeedBack = await _context.TicketFeedBacks
+                                       .FirstOrDefaultAsync(t => t.TicketID == id);
+            return ticketFeedBack != null ? _mapper.Map<TicketFeedBackVM>(ticketFeedBack) : null;
+
+        }
+
         public async Task Update(TicketFeedBackVM entity)
         {
             var existingTicketFeedBack = await _context.TicketFeedBacks.FindAsync(entity.FeedbackID);

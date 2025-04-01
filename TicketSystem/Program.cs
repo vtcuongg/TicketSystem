@@ -27,6 +27,7 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<ITicketFeedBackRepository, TicketFeedBackRepository>();
 builder.Services.AddScoped<ITicketFeedBackAssigneeRepository, TicketFeedBackAssigneeRepository>();
+builder.Services.AddScoped<ITicketAssignmentRepository, TicketAssignmentRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

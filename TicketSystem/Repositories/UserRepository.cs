@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using TicketSystem.Data;
 using TicketSystem.Models;
 using TicketSystem.Repositories.Interface;
@@ -12,7 +13,8 @@ namespace TicketSystem.Repositories
         private readonly MyDbContext _context;
         private readonly IMapper _mapper;
 
-        public UserRepository(MyDbContext context , IMapper mapper) {
+        public UserRepository(MyDbContext context, IMapper mapper)
+        {
             _context = context;
             _mapper = mapper;
         }
@@ -35,13 +37,19 @@ namespace TicketSystem.Repositories
 
         public async Task<IEnumerable<UserVM>> GetAll()
         {
-            var users=await _context.Users.ToListAsync();
+            var users = await _context.Users.ToListAsync();
+            return _mapper.Map<IEnumerable<UserVM>>(users);
+        }
+
+        public async Task<IEnumerable<UserVM>> GetByDepartmentId(int id)
+        {
+            var users = await _context.Users.Where(t => t.DepartmentID == id).ToListAsync();
             return _mapper.Map<IEnumerable<UserVM>>(users);
         }
 
         public async Task<UserVM?> GetById(int id)
         {
-            var user=await _context.Users.FindAsync(id);
+            var user = await _context.Users.FindAsync(id);
             return user != null ? _mapper.Map<UserVM>(user) : null;
         }
 
@@ -58,6 +66,39 @@ namespace TicketSystem.Repositories
             else
             {
                 throw new KeyNotFoundException($"Không tìm thấy User với ID = {entity.UserID}");
+            }
+        }
+
+        public async Task UpdateDepartment(int userID, int DepartmentId)
+        {
+            var existingUser = await _context.Users.FindAsync(userID);
+            if (existingUser != null)
+            {
+                existingUser.DepartmentID = DepartmentId;
+
+                _context.Users.Update(existingUser);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new KeyNotFoundException($"Không tìm thấy User với ID = {userID}");
+            }
+
+        }
+
+        public async Task UpdateRole(int userID, int RoleId)
+        {
+            var existingUser = await _context.Users.FindAsync(userID);
+            if (existingUser != null)
+            {
+                existingUser.RoleID = RoleId;
+
+                _context.Users.Update(existingUser);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new KeyNotFoundException($"Không tìm thấy User với ID = {userID}");
             }
         }
     }
