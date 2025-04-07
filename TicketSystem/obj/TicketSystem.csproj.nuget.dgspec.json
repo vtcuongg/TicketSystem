@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\TicketSystem\\TicketSystem\\TicketSystem.csproj": {}
+    "C:\\TicketSystem-root - Copy\\TicketSystem\\TicketSystem.csproj": {}
   },
   "projects": {
-    "C:\\TicketSystem\\TicketSystem\\TicketSystem.csproj": {
+    "C:\\TicketSystem-root - Copy\\TicketSystem\\TicketSystem.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\TicketSystem\\TicketSystem\\TicketSystem.csproj",
+        "projectUniqueName": "C:\\TicketSystem-root - Copy\\TicketSystem\\TicketSystem.csproj",
         "projectName": "TicketSystem",
-        "projectPath": "C:\\TicketSystem\\TicketSystem\\TicketSystem.csproj",
+        "projectPath": "C:\\TicketSystem-root - Copy\\TicketSystem\\TicketSystem.csproj",
         "packagesPath": "C:\\Users\\asusp\\.nuget\\packages\\",
-        "outputPath": "C:\\TicketSystem\\TicketSystem\\obj\\",
+        "outputPath": "C:\\TicketSystem-root - Copy\\TicketSystem\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\asusp\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -43,6 +43,14 @@
             "AutoMapper.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
               "version": "[8.1.1, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.14, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.14, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",

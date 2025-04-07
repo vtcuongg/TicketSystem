@@ -14,53 +14,6 @@ namespace TicketSystem.Controllers
         {
             this._ticketRepository = ticketRepository;
         }
-        //[HttpGet]
-        //public async Task<IActionResult> GetAllTicket()
-        //{
-        //    try
-        //    {
-        //        var tickets = await _ticketRepository.GetAll();
-        //        return Ok(new { data = tickets });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, new { message = "Lỗi khi lấy danh sách Ticket", error = ex.Message });
-        //    }
-        //}
-
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> GetTicketById(int id)
-        //{
-        //    try
-        //    {
-        //        var ticket = await _ticketRepository.GetById(id);
-        //        if (ticket == null)
-        //            return NotFound(new { message = $"Không tìm thấy Ticket với ID = {id}" });
-
-        //        return Ok(new { data = ticket });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, new { message = "Lỗi khi lấy Ticket", error = ex.Message });
-        //    }
-        //}
-
-        //[HttpGet("ByUser/{UserId}")]
-        //public async Task<IActionResult> GetTicketByUserId(int UserId)
-        //{
-        //    try
-        //    {
-        //        var tickets = await _ticketRepository.GetByUserId(UserId);
-        //        if (tickets == null || !tickets.Any())
-        //            return NotFound(new { message = $"Không tìm thấy Ticket nào cho UserID = {UserId}" });
-
-        //        return Ok(new { data = tickets });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, new { message = "Lỗi khi lấy Ticket theo UserID", error = ex.Message });
-        //    }
-        //}
         [HttpGet("ByDepartmentId/{DepartmentId}")]
         public async Task<IActionResult> GetTicketByDepartmentId(int DepartmentId)
         {

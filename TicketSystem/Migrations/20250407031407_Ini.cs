@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TicketSystem.Migrations
 {
     /// <inheritdoc />
-    public partial class Fizxxx1 : Migration
+    public partial class Ini : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,23 +25,40 @@ namespace TicketSystem.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Roles",
+                name: "RoleClaims",
                 columns: table => new
                 {
-                    RoleID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Roles", x => x.RoleID);
+                    table.PrimaryKey("PK_RoleClaims", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Roles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "SearchTicketResults",
                 columns: table => new
                 {
-                    TicketID = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TicketID = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Priority = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -63,6 +80,62 @@ namespace TicketSystem.Migrations
                 },
                 constraints: table =>
                 {
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserClaims", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserLogins",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LoginProvider = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserLogins", x => x.UserId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRoles", x => new { x.UserId, x.RoleId });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserTokens",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
                 });
 
             migrationBuilder.CreateTable(
@@ -89,25 +162,34 @@ namespace TicketSystem.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    UserID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FullName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Gender = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
                     Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     Avatar = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    NationalID = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    NationalID = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
                     DepartmentID = table.Column<int>(type: "int", nullable: true),
-                    RoleID = table.Column<int>(type: "int", nullable: true),
                     Status = table.Column<string>(type: "NVARCHAR(10)", maxLength: 10, nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "SYSDATETIME()")
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "SYSDATETIME()"),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.UserID);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                     table.CheckConstraint("CHK_User_Status", "Status IN (N'Active', N'Inactive')");
                     table.CheckConstraint("CK_User_Gender", "Gender IN (N'Nam', N'Nữ', N'Khác')");
                     table.ForeignKey(
@@ -115,12 +197,6 @@ namespace TicketSystem.Migrations
                         column: x => x.DepartmentID,
                         principalTable: "Departments",
                         principalColumn: "DepartmentID",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_Users_Roles_RoleID",
-                        column: x => x.RoleID,
-                        principalTable: "Roles",
-                        principalColumn: "RoleID",
                         onDelete: ReferentialAction.SetNull);
                 });
 
@@ -160,8 +236,41 @@ namespace TicketSystem.Migrations
                         name: "FK_Tickets_Users_CreatedBy",
                         column: x => x.CreatedBy,
                         principalTable: "Users",
-                        principalColumn: "UserID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    NotificationID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SenderID = table.Column<int>(type: "int", nullable: true),
+                    ReceiverID = table.Column<int>(type: "int", nullable: true),
+                    TicketID = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsRead = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.NotificationID);
+                    table.ForeignKey(
+                        name: "FK_Notifications_Tickets_TicketID",
+                        column: x => x.TicketID,
+                        principalTable: "Tickets",
+                        principalColumn: "TicketID");
+                    table.ForeignKey(
+                        name: "FK_Notifications_Users_ReceiverID",
+                        column: x => x.ReceiverID,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Notifications_Users_SenderID",
+                        column: x => x.SenderID,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -170,7 +279,7 @@ namespace TicketSystem.Migrations
                 {
                     AssignmentID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TicketID = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    TicketID = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     AssignedTo = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -186,7 +295,32 @@ namespace TicketSystem.Migrations
                         name: "FK_TicketAssignments_Users_AssignedTo",
                         column: x => x.AssignedTo,
                         principalTable: "Users",
-                        principalColumn: "UserID");
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TicketFeedbackAssignees",
+                columns: table => new
+                {
+                    TicketFeedbackAssigneeID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TicketID = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    AssignedTo = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TicketFeedbackAssignees", x => x.TicketFeedbackAssigneeID);
+                    table.ForeignKey(
+                        name: "FK_TicketFeedbackAssignees_Tickets_TicketID",
+                        column: x => x.TicketID,
+                        principalTable: "Tickets",
+                        principalColumn: "TicketID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TicketFeedbackAssignees_Users_AssignedTo",
+                        column: x => x.AssignedTo,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -214,38 +348,7 @@ namespace TicketSystem.Migrations
                         name: "FK_TicketFeedBacks_Users_CreatedBy",
                         column: x => x.CreatedBy,
                         principalTable: "Users",
-                        principalColumn: "UserID");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TicketFeedbackAssignees",
-                columns: table => new
-                {
-                    TicketFeedbackAssigneeID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TicketID = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    AssignedTo = table.Column<int>(type: "int", nullable: false),
-                    //TicketFeedBackFeedbackID = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TicketFeedbackAssignees", x => x.TicketFeedbackAssigneeID);
-                    //table.ForeignKey(
-                    //    name: "FK_TicketFeedbackAssignees_TicketFeedBacks_TicketFeedBackFeedbackID",
-                    //    column: x => x.TicketFeedBackFeedbackID,
-                    //    principalTable: "TicketFeedBacks",
-                    //    principalColumn: "FeedbackID");
-                    table.ForeignKey(
-                        name: "FK_TicketFeedbackAssignees_Tickets_TicketID",
-                        column: x => x.TicketID,
-                        principalTable: "Tickets",
-                        principalColumn: "TicketID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TicketFeedbackAssignees_Users_AssignedTo",
-                        column: x => x.AssignedTo,
-                        principalTable: "Users",
-                        principalColumn: "UserID");
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -260,10 +363,19 @@ namespace TicketSystem.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Roles_RoleName",
-                table: "Roles",
-                column: "RoleName",
-                unique: true);
+                name: "IX_Notifications_ReceiverID",
+                table: "Notifications",
+                column: "ReceiverID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notifications_SenderID",
+                table: "Notifications",
+                column: "SenderID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notifications_TicketID",
+                table: "Notifications",
+                column: "TicketID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TicketAssignments_AssignedTo",
@@ -279,11 +391,6 @@ namespace TicketSystem.Migrations
                 name: "IX_TicketFeedbackAssignees_AssignedTo",
                 table: "TicketFeedbackAssignees",
                 column: "AssignedTo");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TicketFeedbackAssignees_TicketFeedBackFeedbackID",
-                table: "TicketFeedbackAssignees",
-                column: "TicketFeedBackFeedbackID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TicketFeedbackAssignees_TicketID",
@@ -325,29 +432,20 @@ namespace TicketSystem.Migrations
                 name: "IX_Users_DepartmentID",
                 table: "Users",
                 column: "DepartmentID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_Email",
-                table: "Users",
-                column: "Email",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_NationalID",
-                table: "Users",
-                column: "NationalID",
-                unique: true,
-                filter: "[NationalID] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_RoleID",
-                table: "Users",
-                column: "RoleID");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Notifications");
+
+            migrationBuilder.DropTable(
+                name: "RoleClaims");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
+
             migrationBuilder.DropTable(
                 name: "SearchTicketResults");
 
@@ -361,6 +459,18 @@ namespace TicketSystem.Migrations
                 name: "TicketFeedBacks");
 
             migrationBuilder.DropTable(
+                name: "UserClaims");
+
+            migrationBuilder.DropTable(
+                name: "UserLogins");
+
+            migrationBuilder.DropTable(
+                name: "UserRoles");
+
+            migrationBuilder.DropTable(
+                name: "UserTokens");
+
+            migrationBuilder.DropTable(
                 name: "Tickets");
 
             migrationBuilder.DropTable(
@@ -371,9 +481,6 @@ namespace TicketSystem.Migrations
 
             migrationBuilder.DropTable(
                 name: "Departments");
-
-            migrationBuilder.DropTable(
-                name: "Roles");
         }
     }
 }

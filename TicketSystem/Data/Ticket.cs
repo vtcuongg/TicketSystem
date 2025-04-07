@@ -9,7 +9,7 @@ namespace TicketSystem.Data
         
         [DatabaseGenerated(DatabaseGeneratedOption.None)] // Không tự động tăng
         [Required, StringLength(50)]
-        public string  TicketID { get; set; }
+        public string? TicketID { get; set; }
 
         [Required, StringLength(255)]
          public string Title { get; set; } = string.Empty;

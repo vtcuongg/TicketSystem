@@ -1,4 +1,5 @@
-﻿using TicketSystem.Data;
+﻿using Microsoft.AspNetCore.Identity;
+using TicketSystem.Data;
 using TicketSystem.Models;
 using TicketSystem.ViewModel;
 
@@ -9,10 +10,9 @@ namespace TicketSystem.Repositories.Interface
         Task<IEnumerable<UserVM>> GetAll();
         Task<UserVM?> GetById(int id);
         Task<IEnumerable<UserVM>> GetByDepartmentId(int id);
-        Task Add(UserModel entity);
+        Task<IdentityResult> Add(UserModel entity);
         Task Update(UserVM entity);
-        Task Delete(int id);
-        Task UpdateDepartment(int userID, int DepartmentId);
-        Task UpdateRole(int userID, int RoleId);
+        Task Delete(string email);
+        Task<UserVM> GetByEmail(string email);
     }
 }

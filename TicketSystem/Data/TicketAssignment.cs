@@ -9,7 +9,7 @@ namespace TicketSystem.Data
         public int AssignmentID { get; set; }
 
         [ForeignKey("Ticket")]
-        public string TicketID { get; set; }
+        public string? TicketID { get; set; }
         public Ticket Ticket { get; set; } = null!;
 
         [ForeignKey("User")]

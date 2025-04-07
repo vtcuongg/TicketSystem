@@ -17,9 +17,24 @@ namespace TicketSystem.Repositories
             _context = context;
             _mapper = mapper;
         }
+        public async Task<string> GenerateTicketCode()
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "sp_GenerateTicketCode";
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                await _context.Database.OpenConnectionAsync();
+                var result = await command.ExecuteScalarAsync();
+                await _context.Database.CloseConnectionAsync();
+
+                return result?.ToString() ?? throw new Exception("Không thể tạo TicketID.");
+            }
+        }
         public async Task Add(TicketVM entity)
         {
             var ticket = _mapper.Map<Ticket>(entity);
+            ticket.TicketID = await GenerateTicketCode();
             await _context.AddAsync(ticket);
             await _context.SaveChangesAsync();
         }
@@ -119,7 +134,7 @@ namespace TicketSystem.Repositories
         }
 
         public async Task<IEnumerable<Ticket_SearchVM>> SearchTickets(
-        string? ticketId,string? title, int? day, int? month, int? year,
+        string? ticketId, string? title, int? day, int? month, int? year,
         int? createdBy, int? departmentId, int? assignedTo)
         {
             var result = await _context.SearchTicketResults
@@ -176,7 +191,7 @@ namespace TicketSystem.Repositories
                         {
                             AssignmentID = g.AssignmentID,
                             AssignedTo = g.AssignedTo,
-                            FullName = g.FullName,
+                            UserName = g.UserName,
                             Avatar = g.Avatar
                         }).ToList()
                 }).ToList();
@@ -191,6 +206,6 @@ namespace TicketSystem.Repositories
             return tickets != null ? _mapper.Map<List<TicketVM>>(tickets) : null;
         }
 
-      
+
     }
 }

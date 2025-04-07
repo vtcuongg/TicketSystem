@@ -2,7 +2,7 @@
 {
     public class SearchTicketResult
     {
-        public string TicketID { get; set; }
+        public string? TicketID { get; set; }
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string Priority { get; set; } = "Thấp";
@@ -21,7 +21,7 @@
         // Thông tin người xử lý
         public int? AssignmentID { get; set; }
         public int? AssignedTo { get; set; }
-        public string? FullName { get; set; }
+        public string? UserName { get; set; }
         public string? Avatar { get; set; }
     }
 

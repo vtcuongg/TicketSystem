@@ -1,34 +1,46 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TicketSystem.Models;
 
 namespace TicketSystem.Data
 {
-    public class MyDbContext : DbContext 
+    public class MyDbContext : IdentityDbContext<User,Role,int>
     {
-        public DbSet<Role> Roles { get; set; }
         public DbSet<Department> Departments { get; set; }
-        public DbSet<User> Users { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<TicketFeedBack> TicketFeedBacks { get; set; }
         public DbSet<TicketAssignment> TicketAssignments { get; set; }
         public DbSet<TicketFeedbackAssignee> TicketFeedbackAssignees { get; set; }
         public DbSet<SearchTicketResult> SearchTicketResults { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
         public MyDbContext(DbContextOptions<MyDbContext> options):base(options)
         {
 
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+           
+            modelBuilder.Entity<IdentityUserToken<int>>().HasKey(userToken => new { userToken.UserId, userToken.LoginProvider, userToken.Name });
+            modelBuilder.Entity<IdentityUserLogin<int>>().HasKey(login => login.UserId);
+            modelBuilder.Entity<IdentityUserRole<int>>().HasKey(userRole => new { userRole.UserId, userRole.RoleId });
+            modelBuilder.Entity<IdentityUserClaim<int>>().HasKey(userClaim => userClaim.Id);
+            modelBuilder.Entity<IdentityRoleClaim<int>>().HasKey(roleClaim => roleClaim.Id);
+            modelBuilder.Entity<Role>().HasKey(role => role.Id);
+            modelBuilder.Entity<User>()
+               .HasIndex(u => u.Email)
+               .IsUnique(); 
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.NationalID)
+                .IsUnique(); 
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.PhoneNumber)
+                .IsUnique(); 
             modelBuilder.Entity<Ticket>()
-            .HasIndex(t => t.TicketID) // Tạo chỉ mục
-            .IsUnique(); // Đảm bảo giá trị là duy nhất
-            modelBuilder.Entity<Role>().HasIndex(r => r.RoleName).IsUnique();
+            .HasIndex(t => t.TicketID) 
+            .IsUnique(); 
             modelBuilder.Entity<Department>().HasIndex(d => d.DepartmentName).IsUnique();
-            modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
-            modelBuilder.Entity<User>().HasIndex(u => u.NationalID).IsUnique();
-
-            
             modelBuilder.Entity<TicketFeedBack>()
            .HasOne(tf => tf.User)
            .WithMany()
@@ -61,16 +73,8 @@ namespace TicketSystem.Data
                 .HasForeignKey(u => u.DepartmentID)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            modelBuilder.Entity<User>()
-                .HasOne(u => u.Role)
-                .WithMany(r => r.Users)
-                .HasForeignKey(u => u.RoleID)
-                .OnDelete(DeleteBehavior.SetNull);
-
             modelBuilder.Entity<Ticket>()
            .ToTable(tb => tb.HasCheckConstraint("CHK_Ticket_Priority", "Priority IN (N'Thấp', N'Trung bình', N'Cao', N'Khẩn cấp')"));
-
-            // ✅ Ràng buộc CHECK cho Status
             modelBuilder.Entity<Ticket>()
                 .ToTable(tb => tb.HasCheckConstraint("CHK_Ticket_Status", "Status IN (N'Mới', N'Đang xử lý', N'Chờ xác nhận', N'Hoàn thành', N'Đã hủy',N'Cháy Deadline')"));
 
@@ -91,8 +95,6 @@ namespace TicketSystem.Data
                 .WithMany() 
                 .HasForeignKey(t => t.AssignedTo)
                 .OnDelete(DeleteBehavior.NoAction);
-
-            // Không ánh xạ SearchTicketResult vào bảng database
             modelBuilder.Entity<SearchTicketResult>().HasNoKey();
         }
     }

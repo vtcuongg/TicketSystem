@@ -10,15 +10,16 @@ namespace TicketSystem.Helper
     {
         public ApplicationMapper()
         {
-            CreateMap<User, UserModel>().ReverseMap();
+            CreateMap<User, UserVM>();
+            CreateMap<User, UserModel>();
             CreateMap<Department, DepartmentVM>().ReverseMap();
             CreateMap<Role, RoleVM>().ReverseMap();
-            CreateMap<User, UserVM>().ReverseMap();
             CreateMap<Category, CategoryVM>().ReverseMap();
             CreateMap<Ticket, TicketVM>().ReverseMap();
             CreateMap<TicketFeedBack, TicketFeedBackVM>().ReverseMap();
             CreateMap<TicketFeedbackAssignee,TicketFeedBackAssigneeVM >().ReverseMap();
             CreateMap<TicketAssignment, TicketAssignmentVM>().ReverseMap();
+            CreateMap<Notification, NotificationVM>().ReverseMap();
 
         }
 

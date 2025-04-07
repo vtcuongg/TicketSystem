@@ -12,8 +12,8 @@ using TicketSystem.Data;
 namespace TicketSystem.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20250329170352_Fizxxx1")]
-    partial class Fizxxx1
+    [Migration("20250407031407_Ini")]
+    partial class Ini
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,106 @@ namespace TicketSystem.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RoleClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+                {
+                    b.Property<int>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
+
+                    b.Property<string>("LoginProvider")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProviderKey")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("UserLogins");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.ToTable("UserRoles");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("UserTokens");
+                });
 
             modelBuilder.Entity("TicketSystem.Data.Category", b =>
                 {
@@ -69,23 +169,63 @@ namespace TicketSystem.Migrations
                     b.ToTable("Departments");
                 });
 
-            modelBuilder.Entity("TicketSystem.Data.Role", b =>
+            modelBuilder.Entity("TicketSystem.Data.Notification", b =>
                 {
-                    b.Property<int>("RoleID")
+                    b.Property<int>("NotificationID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NotificationID"));
 
-                    b.Property<string>("RoleName")
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ReceiverID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SenderID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TicketID")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("RoleID");
+                    b.HasKey("NotificationID");
 
-                    b.HasIndex("RoleName")
-                        .IsUnique();
+                    b.HasIndex("ReceiverID");
+
+                    b.HasIndex("SenderID");
+
+                    b.HasIndex("TicketID");
+
+                    b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("TicketSystem.Data.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Roles");
                 });
@@ -168,7 +308,6 @@ namespace TicketSystem.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("TicketID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("AssignmentID");
@@ -226,9 +365,6 @@ namespace TicketSystem.Migrations
                     b.Property<int>("AssignedTo")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TicketFeedBackFeedbackID")
-                        .HasColumnType("int");
-
                     b.Property<string>("TicketID")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -238,8 +374,6 @@ namespace TicketSystem.Migrations
 
                     b.HasIndex("AssignedTo");
 
-                    b.HasIndex("TicketFeedBackFeedbackID");
-
                     b.HasIndex("TicketID");
 
                     b.ToTable("TicketFeedbackAssignees");
@@ -247,11 +381,14 @@ namespace TicketSystem.Migrations
 
             modelBuilder.Entity("TicketSystem.Data.User", b =>
                 {
-                    b.Property<int>("UserID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
 
                     b.Property<string>("Address")
                         .HasMaxLength(500)
@@ -260,6 +397,9 @@ namespace TicketSystem.Migrations
                     b.Property<string>("Avatar")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -273,49 +413,57 @@ namespace TicketSystem.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Gender")
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("NationalID")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Phone")
+                    b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RoleID")
-                        .HasColumnType("int");
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("NVARCHAR(10)");
 
-                    b.HasKey("UserID");
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("DepartmentID");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.HasIndex("NationalID")
-                        .IsUnique()
-                        .HasFilter("[NationalID] IS NOT NULL");
-
-                    b.HasIndex("RoleID");
 
                     b.ToTable("Users", t =>
                         {
@@ -381,7 +529,6 @@ namespace TicketSystem.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TicketID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
@@ -403,6 +550,27 @@ namespace TicketSystem.Migrations
                         .IsRequired();
 
                     b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("TicketSystem.Data.Notification", b =>
+                {
+                    b.HasOne("TicketSystem.Data.User", "Receiver")
+                        .WithMany()
+                        .HasForeignKey("ReceiverID");
+
+                    b.HasOne("TicketSystem.Data.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderID");
+
+                    b.HasOne("TicketSystem.Data.Ticket", "Ticket")
+                        .WithMany()
+                        .HasForeignKey("TicketID");
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
+
+                    b.Navigation("Ticket");
                 });
 
             modelBuilder.Entity("TicketSystem.Data.Ticket", b =>
@@ -439,8 +607,7 @@ namespace TicketSystem.Migrations
                     b.HasOne("TicketSystem.Data.Ticket", "Ticket")
                         .WithMany()
                         .HasForeignKey("TicketID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Ticket");
 
@@ -474,10 +641,6 @@ namespace TicketSystem.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("TicketSystem.Data.TicketFeedBack", null)
-                        .WithMany("AssignedUsers")
-                        .HasForeignKey("TicketFeedBackFeedbackID");
-
                     b.HasOne("TicketSystem.Data.Ticket", "Ticket")
                         .WithMany()
                         .HasForeignKey("TicketID")
@@ -496,29 +659,12 @@ namespace TicketSystem.Migrations
                         .HasForeignKey("DepartmentID")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("TicketSystem.Data.Role", "Role")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleID")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.Navigation("Department");
-
-                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("TicketSystem.Data.Department", b =>
                 {
                     b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("TicketSystem.Data.Role", b =>
-                {
-                    b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("TicketSystem.Data.TicketFeedBack", b =>
-                {
-                    b.Navigation("AssignedUsers");
                 });
 #pragma warning restore 612, 618
         }

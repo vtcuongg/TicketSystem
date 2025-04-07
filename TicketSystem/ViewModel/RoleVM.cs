@@ -2,7 +2,8 @@
 {
     public class RoleVM
     {
-        public int RoleID { get; set; }
-        public string RoleName { get; set; } = string.Empty;
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string NormalizedName { get; set; } = string.Empty;
     }
 }

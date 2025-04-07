@@ -72,7 +72,7 @@ namespace TicketSystem.Controllers
                 return BadRequest("Danh sách AssignedTo không được trống.");
             }
 
-            await _ticketAssignmentRepository.AssignUsersToTicket(request.TicketID, request.AssignedToList);
+            await _ticketAssignmentRepository.AssignUsersToTicket(request.TicketID ?? "", request.AssignedToList);
             return Ok(new { message = "Cập nhật danh sách AssignedTo thành công." });
         }
         [HttpPut]

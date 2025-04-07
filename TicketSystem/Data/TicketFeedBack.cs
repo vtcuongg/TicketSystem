@@ -9,7 +9,7 @@ namespace TicketSystem.Data
         public int FeedbackID { get; set; }
 
         [Required]
-        public string TicketID { get; set; }
+        public string? TicketID { get; set; }
 
         [Required]
         public int? CreatedBy { get; set; } // Người tạo feedback

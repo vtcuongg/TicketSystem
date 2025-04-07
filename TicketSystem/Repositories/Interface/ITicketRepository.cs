@@ -4,9 +4,8 @@ namespace TicketSystem.Repositories.Interface
 {
     public interface ITicketRepository
     {
-        //Task<IEnumerable<TicketVM>> GetAll();
+        
         Task<TicketVM?> GetById(string id);
-        //Task<IEnumerable<TicketVM>?> GetByUserId(int id);
         Task<IEnumerable<TicketVM>?> GetByDepartmentId(int id);
         Task Add(TicketVM entity);
         Task Update(TicketVM entity);

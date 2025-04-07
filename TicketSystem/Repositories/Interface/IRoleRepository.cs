@@ -6,8 +6,9 @@ namespace TicketSystem.Repositories.Interface
     {
         Task<IEnumerable<RoleVM>> GetAll();
         Task<RoleVM?> GetById(int id);
-        Task Add(RoleVM entity);
-        Task Update(RoleVM entity);
-        Task Delete(int id);
+        Task<bool> Add(RoleVM entity);
+        Task<bool> Update(RoleVM entity);
+        Task<bool> Delete(int id);
+
     }
 }

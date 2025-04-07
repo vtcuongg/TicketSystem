@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TicketSystem.Data;
 using TicketSystem.Repositories.Interface;
@@ -8,57 +9,58 @@ namespace TicketSystem.Repositories
 {
     public class RoleRepository : IRoleRepository
     {
-        private readonly MyDbContext _context;
+        private readonly RoleManager<Role> _roleManager;
         private readonly IMapper _mapper;
 
-        public RoleRepository(MyDbContext context, IMapper mapper)
+        public RoleRepository(RoleManager<Role> roleManager, IMapper mapper)
         {
-            _context = context;
+            _roleManager = roleManager;
             _mapper = mapper;
         }
-        public async Task Add(RoleVM entity)
+        // Thêm Role mới
+        public async Task<bool> Add(RoleVM entity)
         {
-            var role = _mapper.Map<Role>(entity);
-            await _context.AddAsync(role);
-            await _context.SaveChangesAsync();
+            var role = new Role { Name = entity.Name, NormalizedName = entity.NormalizedName };
+            var result = await _roleManager.CreateAsync(role);
+            return result.Succeeded;
+        }
+        // Xóa Role theo ID
+        public async Task<bool> Delete(int id)
+        {
+            var role = await _roleManager.FindByIdAsync(id.ToString());
+            if (role == null) return false;
+
+            var result = await _roleManager.DeleteAsync(role);
+            return result.Succeeded;
         }
 
-        public async Task Delete(int id)
-        {
-            var role = await _context.Roles.FindAsync(id);
-            if (role != null)
-            {
-                _context.Roles.Remove(role);
-                await _context.SaveChangesAsync();
-            }
-        }
-
+        // Lấy danh sách tất cả Role
         public async Task<IEnumerable<RoleVM>> GetAll()
         {
-            var roles = await _context.Roles.ToListAsync();
+            var roles = await _roleManager.Roles.ToListAsync();
+            if (roles == null || !roles.Any())
+            {
+                return new List<RoleVM>(); // Trả về một danh sách trống
+            }
             return _mapper.Map<IEnumerable<RoleVM>>(roles);
         }
-
+        // Lấy Role theo ID
         public async Task<RoleVM?> GetById(int id)
         {
-            var role = await _context.Roles.FindAsync(id);
+            var role = await _roleManager.FindByIdAsync(id.ToString());
             return role != null ? _mapper.Map<RoleVM>(role) : null;
         }
 
-        public async Task Update(RoleVM entity)
+        // Cập nhật Role
+        public async Task<bool> Update(RoleVM entity)
         {
-            var existingRole = await _context.Users.FindAsync(entity.RoleID);
-            if (existingRole != null)
-            {
-                _mapper.Map(entity, existingRole);
-                _context.Users.Update(existingRole);
-                await _context.SaveChangesAsync();
+            var role = await _roleManager.FindByIdAsync(entity.Id.ToString());
+            if (role == null) return false;
 
-            }
-            else
-            {
-                throw new KeyNotFoundException($"Không tìm thấy User với ID = {entity.RoleID}");
-            }
+            role.Name = entity.Name;
+            role.NormalizedName = entity.NormalizedName;
+            var result = await _roleManager.UpdateAsync(role);
+            return result.Succeeded;
         }
     }
 

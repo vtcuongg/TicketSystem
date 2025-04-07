@@ -50,6 +50,22 @@ namespace TicketSystem.Controllers
                 return StatusCode(500, new { message = "Lỗi máy chủ", error = ex.Message });
             }
         }
+        [HttpGet("Email")]
+        public async Task<IActionResult> GetUserByEmail(string email)
+        {
+            try
+            {
+                var user = await _userRepository.GetByEmail(email);
+                if (user == null)
+                    return NotFound(new { message = $"Không tìm thấy User với Email  = {email}" });
+
+                return Ok(new { data = user });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Lỗi máy chủ", error = ex.Message });
+            }
+        }
         [HttpGet("ByDepartment/{id}")]
         public async Task<IActionResult> GetUserByDepartmentId(int id)
         {
@@ -102,47 +118,21 @@ namespace TicketSystem.Controllers
                 return StatusCode(500, new { message = "Lỗi khi cập nhật user", error = ex.Message });
             }
         }
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        [HttpDelete("ByEmail")]
+        public async Task<IActionResult> DeleteUser(string email)
         {
             try
             {
-                var user = await _userRepository.GetById(id);
+                var user = await _userRepository.GetByEmail(email);
                 if (user == null)
-                    return NotFound(new { message = $"Không tìm thấy User với ID = {id}" });
+                    return NotFound(new { message = $"Không tìm thấy User với Email = {email}" });
 
-                await _userRepository.Delete(id);
+                await _userRepository.Delete(email);
                 return Ok(new { message = "Xóa user thành công" });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = "Lỗi khi xóa user", error = ex.Message });
-            }
-        }
-        [HttpPatch("Department")]
-        public async Task<IActionResult> UpdateDepartment(int userId, [FromBody] int newDepartmentId)
-        {
-            try
-            {
-                await _userRepository.UpdateDepartment(userId, newDepartmentId);
-                return Ok(new { message = "Cập nhật thành công" });
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
-        [HttpPatch("Role")]
-        public async Task<IActionResult> UpdateRole(int userId, [FromBody] int newRole)
-        {
-            try
-            {
-                await _userRepository.UpdateRole(userId, newRole);
-                return Ok(new { message = "Cập nhật thành công" });
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
             }
         }
     }
