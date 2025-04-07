@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TicketSystem.Repositories.Interface;
 using TicketSystem.ViewModel;
@@ -15,6 +16,7 @@ namespace TicketSystem.Controllers
             this._ticketRepository = ticketRepository;
         }
         [HttpGet("ByDepartmentId/{DepartmentId}")]
+        [Authorize(Roles = "Manager,Employee")]
         public async Task<IActionResult> GetTicketByDepartmentId(int DepartmentId)
         {
             try
@@ -33,6 +35,7 @@ namespace TicketSystem.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddTicket(TicketVM ticket)
         {
             try
@@ -50,6 +53,7 @@ namespace TicketSystem.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> UpdateTicket(TicketVM ticket)
         {
             try
@@ -71,6 +75,7 @@ namespace TicketSystem.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteTicket(string id)
         {
             try
@@ -92,6 +97,7 @@ namespace TicketSystem.Controllers
             }
         }
         [HttpPatch("Status")]
+        [Authorize]
         public async Task<IActionResult> UpdateTicketStatus(string TicketId, [FromBody] string newStatus)
         {
             if (string.IsNullOrWhiteSpace(newStatus))
@@ -109,6 +115,7 @@ namespace TicketSystem.Controllers
             }
         }
         [HttpPatch("Priority")]
+        [Authorize]
         public async Task<IActionResult> UpdatePriority(string TicketId, [FromBody] string newPriority)
         {
             if (string.IsNullOrWhiteSpace(newPriority))
@@ -126,6 +133,7 @@ namespace TicketSystem.Controllers
             }
         }
         [HttpPatch("IsFeedBack")]
+        [Authorize]
         public async Task<IActionResult> UpdateIsFeedBack(string TicketId, [FromBody] Boolean newIsFeedBack)
         {
             try
@@ -139,6 +147,7 @@ namespace TicketSystem.Controllers
             }
         }
         [HttpGet("search")]
+        [Authorize]
         public async Task<IActionResult> SearchTickets([FromQuery] string? TicketId, [FromQuery] string? title, [FromQuery] int? day, [FromQuery] int? month, [FromQuery] int? year
             ,[FromQuery] int? createdBy, [FromQuery] int? departmentId, [FromQuery] int? assignto)
         {

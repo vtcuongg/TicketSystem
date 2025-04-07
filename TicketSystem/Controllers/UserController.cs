@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using TicketSystem.Data;
@@ -19,6 +20,7 @@ namespace TicketSystem.Controllers
             this._userRepository = userRepository;
         }
         [HttpGet]
+        [Authorize(Roles="Admin")]
         public async Task<IActionResult> GetAllUsers()
         {
             try
@@ -35,6 +37,7 @@ namespace TicketSystem.Controllers
 
         }
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetUserById(int id)
         {
             try
@@ -51,6 +54,7 @@ namespace TicketSystem.Controllers
             }
         }
         [HttpGet("Email")]
+        [Authorize]
         public async Task<IActionResult> GetUserByEmail(string email)
         {
             try
@@ -67,6 +71,7 @@ namespace TicketSystem.Controllers
             }
         }
         [HttpGet("ByDepartment/{id}")]
+        [Authorize(Roles="Employee,Manager")]
         public async Task<IActionResult> GetUserByDepartmentId(int id)
         {
             try
@@ -83,6 +88,7 @@ namespace TicketSystem.Controllers
             }
         }
         [HttpPost]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> AddUser(UserModel user)
         {
             try
@@ -99,6 +105,7 @@ namespace TicketSystem.Controllers
             }
         }
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateUser(UserVM user)
         {
             try
@@ -119,6 +126,7 @@ namespace TicketSystem.Controllers
             }
         }
         [HttpDelete("ByEmail")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteUser(string email)
         {
             try

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TicketSystem.Data;
 using TicketSystem.Repositories.Interface;
@@ -17,6 +18,8 @@ namespace TicketSystem.Controllers
             this._categoryRepository = categoryRepository;
         }
         [HttpGet]
+        [Authorize]
+
         public async Task<IActionResult> GetAllCategory()
         {
             try
@@ -31,6 +34,7 @@ namespace TicketSystem.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetCategoryById(int id)
         {
             try
@@ -48,6 +52,7 @@ namespace TicketSystem.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddCategory(CategoryVM category)
         {
             try
@@ -65,6 +70,7 @@ namespace TicketSystem.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateCategory(CategoryVM category)
         {
             try
@@ -86,6 +92,7 @@ namespace TicketSystem.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             try

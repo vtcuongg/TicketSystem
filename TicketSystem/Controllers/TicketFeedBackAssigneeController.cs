@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TicketSystem.Repositories.Interface;
 using TicketSystem.ViewModel;
@@ -14,8 +15,9 @@ namespace TicketSystem.Controllers
         {
             this._ticketFeedBackAssigneeRepository = ticketFeedBackAssigneeRepository;
         }
-      
+
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddTicketFeedBackAssignee(TicketFeedBackAssigneeVM ticketFeedBackAssignee)
         {
 
@@ -39,6 +41,7 @@ namespace TicketSystem.Controllers
             }
         }
         [HttpDelete]
+        [Authorize]
         public async Task<IActionResult> DeleteCategory(string TicketId, int assignedTo)
         {
             try

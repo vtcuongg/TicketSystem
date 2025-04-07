@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TicketSystem.Models;
 using TicketSystem.Repositories.Interface;
@@ -17,6 +18,7 @@ namespace TicketSystem.Controllers
             this._ticketAssignmentRepository = ticketAssignmentRepository;
         }
         [HttpGet]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> GetAllTicketAssignment()
         {
             try
@@ -31,6 +33,7 @@ namespace TicketSystem.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Manager,Employee")]
         public async Task<IActionResult> GetTicketAssignmentById(int id)
         {
             try
@@ -48,6 +51,7 @@ namespace TicketSystem.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> AddTicketAssignment(TicketAssignmentVM TicketAssignment)
         {
             try
@@ -65,6 +69,7 @@ namespace TicketSystem.Controllers
         }
 
         [HttpPost("assign-users")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> AssignUsersToTicket([FromBody] AssignUsersRequest request)
         {
             if (request.AssignedToList == null || !request.AssignedToList.Any())
@@ -76,6 +81,7 @@ namespace TicketSystem.Controllers
             return Ok(new { message = "Cập nhật danh sách AssignedTo thành công." });
         }
         [HttpPut]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> UpdateTicketAssignment(TicketAssignmentVM TicketAssignment)
         {
             try
@@ -97,6 +103,7 @@ namespace TicketSystem.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> DeleteTicketAssignment(int id)
         {
             try

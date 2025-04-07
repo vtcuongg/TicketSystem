@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using TicketSystem.Data;
@@ -17,6 +18,7 @@ namespace TicketSystem.Controllers
             this._roleRepository = roleRepository;
         }
         [HttpGet]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> GetAllRoles()
         {
             try
@@ -31,6 +33,7 @@ namespace TicketSystem.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetRoleById(int id)
         {
             try
@@ -48,6 +51,7 @@ namespace TicketSystem.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddRole(RoleVM role)
         {
             try
@@ -65,6 +69,7 @@ namespace TicketSystem.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateRole(RoleVM role)
         {
             try
@@ -86,6 +91,7 @@ namespace TicketSystem.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteRole(int id)
         {
             try

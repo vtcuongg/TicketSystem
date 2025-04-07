@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TicketSystem.Repositories;
 using TicketSystem.Repositories.Interface;
@@ -16,6 +17,7 @@ namespace TicketSystem.Controllers
             this._notificationRepository = _notificationRepository;
         }
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddNotification(NotificationVM notification)
         {
             try
@@ -31,7 +33,8 @@ namespace TicketSystem.Controllers
                 return StatusCode(500, new { message = "Lỗi khi thêm thông báo ", error = ex.Message });
             }
         }
-        [HttpGet("{UserId}")] 
+        [HttpGet("{UserId}")]
+        [Authorize]
         public async Task<IActionResult> GetNotificationsByUserId(int UserId)
         {
             try

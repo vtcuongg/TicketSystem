@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Z49dOlOkiSb+IvSq9pJxLNQzefagLbZYdlAyEQx3tAAYtq4xAgdwLygT+JimN85mYwUSabiXNKcx1lYgRVmVFg==",
+  "dgSpecHash": "ZroBS8NhxDf39qxwsRS0pY0P/ND4D1Nc3/CGow+aV13tOP0EGjQlJQiVyldU0todc7syI1yk33fEWc+eIAO3sg==",
   "success": true,
-  "projectFilePath": "C:\\TicketSystem-root - Copy\\TicketSystem\\TicketSystem.csproj",
+  "projectFilePath": "C:\\TicketSystem\\TicketSystem\\TicketSystem.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\asusp\\.nuget\\packages\\automapper\\10.1.1\\automapper.10.1.1.nupkg.sha512",
     "C:\\Users\\asusp\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\8.1.1\\automapper.extensions.microsoft.dependencyinjection.8.1.1.nupkg.sha512",

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TicketSystem.Repositories;
 using TicketSystem.Repositories.Interface;
@@ -16,6 +17,7 @@ namespace TicketSystem.Controllers
             this._ticketFeedBackRepository = ticketFeedBackRepository;
         }
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllTicketFeedBack()
         {
             try
@@ -30,6 +32,7 @@ namespace TicketSystem.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetTicketFeedBackById(int id)
         {
             try
@@ -47,6 +50,7 @@ namespace TicketSystem.Controllers
         }
 
         [HttpGet("ByTicketId/{id}")]
+        [Authorize]
         public async Task<IActionResult> GetTicketFeedBackByTicketId(string id)
         {
             try
@@ -64,6 +68,7 @@ namespace TicketSystem.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddTicketFeedBack(TicketFeedBackVM ticketFeedBack)
         {
             try
@@ -81,6 +86,7 @@ namespace TicketSystem.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> UpdateTicketFeedBack(TicketFeedBackVM ticketFeedBack)
         {
             try
@@ -102,6 +108,7 @@ namespace TicketSystem.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteTicketFeedBack(int id)
         {
             try

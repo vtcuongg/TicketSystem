@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\TicketSystem-root - Copy\\TicketSystem\\TicketSystem.csproj": {}
+    "C:\\TicketSystem\\TicketSystem\\TicketSystem.csproj": {}
   },
   "projects": {
-    "C:\\TicketSystem-root - Copy\\TicketSystem\\TicketSystem.csproj": {
+    "C:\\TicketSystem\\TicketSystem\\TicketSystem.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\TicketSystem-root - Copy\\TicketSystem\\TicketSystem.csproj",
+        "projectUniqueName": "C:\\TicketSystem\\TicketSystem\\TicketSystem.csproj",
         "projectName": "TicketSystem",
-        "projectPath": "C:\\TicketSystem-root - Copy\\TicketSystem\\TicketSystem.csproj",
+        "projectPath": "C:\\TicketSystem\\TicketSystem\\TicketSystem.csproj",
         "packagesPath": "C:\\Users\\asusp\\.nuget\\packages\\",
-        "outputPath": "C:\\TicketSystem-root - Copy\\TicketSystem\\obj\\",
+        "outputPath": "C:\\TicketSystem\\TicketSystem\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\asusp\\AppData\\Roaming\\NuGet\\NuGet.Config",
